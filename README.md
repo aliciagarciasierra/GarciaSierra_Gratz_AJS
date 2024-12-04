@@ -1,4 +1,4 @@
-**Replication package**: *Does an Educational Reform Moderate the Relationship between Genes and Life Chances? Evidence from the United Kingdom.* 
+**Replication package**: *Does an Increase in the Length of Compulsory Schooling Moderate the Relationship between Genes and Socioeconomic Outcomes? Evidence from the Education Act of 1944 in England.* 
 
 **Authors:** García-Sierra, Alicia & Grätz, Michael
 
