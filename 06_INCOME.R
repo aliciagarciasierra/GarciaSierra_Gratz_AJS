@@ -18,7 +18,7 @@ m4 <- feols(incomelog~ pgeducation*treatment +
            timetrend*treatment
          , data=data)
 
-etable(m4, cluster="timetrend", digits="r3")
+etable(m4, cluster="timetrend", digits="r3", signif.code = signif_codes)
 
 ############################################################################
 ############### Second model: only ascribed characteristics ############### 
@@ -29,7 +29,7 @@ m5<- feols(incomelog~ treatment*ses+
           timetrend*treatment + 
           male, data=data)
 
-etable(m5, cluster="timetrend", digits="r3")
+etable(m5, cluster="timetrend", digits="r3", signif.code = signif_codes)
 
 #######################################################################################
 ############### Third model: genetic factors and ascribed characteristics ############### 
@@ -47,7 +47,7 @@ m6<- feols(incomelog~ treatment*pgeducation*ses +
           male,
           data=data)
 
-etable(m6, cluster="timetrend", digits="r3")
+etable(m6, cluster="timetrend", digits="r3", signif.code = signif_codes)
 
 
 

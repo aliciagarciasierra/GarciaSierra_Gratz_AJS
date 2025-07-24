@@ -18,7 +18,7 @@ m1 <- feols(yoe~ pgeducation*treatment +
            timetrend*treatment,
            data=data)
 
-etable(m1, cluster="timetrend", digits = "r3")
+etable(m1, cluster="timetrend", digits = "r3", signif.code = signif_codes)
 
 
 ############################################################################
@@ -30,7 +30,7 @@ m2<- feols(yoe~ treatment*ses+
           timetrend*treatment + 
           male, data=data)
 
-etable(m2, cluster="timetrend", digits = "r3")
+etable(m2, cluster="timetrend", digits = "r3", signif.code = signif_codes)
 
 
 #######################################################################################
@@ -50,5 +50,6 @@ m3<- feols(yoe~ treatment*pgeducation*ses +
           male,
           data=data)
 
-etable(m3, cluster="timetrend", digits = "r3")
+etable(m3, cluster="timetrend", digits = "r3", signif.code = signif_codes)
+
 

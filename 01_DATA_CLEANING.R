@@ -48,10 +48,8 @@ data<-merged
 
 table(data$rabyear)
 
-# Running variable (time trend)
-
-data$timetrend<-data$rabyear-1933
-table(data$timetrend)
+# Running variable (time trend) centered around its mean
+data$timetrend <- data$rabyear - mean(data$rabyear, na.rm = TRUE)
 
 # Treated cohorts: those who are born after 1934 (included)
 
@@ -60,6 +58,15 @@ data$treatment[data$rabyear>=1934 & data$rabyear<=1944]<-1
 data$treatment[data$rabyear<=1932 & data$rabyear>=1922]<-0
 table(data$treatment)
 data$treatment<-as.factor(data$treatment)
+
+# Alternative Treatment 1 for robustness (including 1933 in treated)
+
+data$alt_treatment<-NA
+data$alt_treatment[data$rabyear>=1933 & data$rabyear<=1944]<-1 #treated
+data$alt_treatment[data$rabyear<=1932 & data$rabyear>=1922]<-0
+table(data$alt_treatment)
+data$alt_treatment<-as.factor(data$alt_treatment)
+
 
 #########################################################
 ######## CLEAN OUTCOME VARIABLES ########################
@@ -108,7 +115,6 @@ summary(data$income)
 data$incomelog<-log(data$income+1, base=exp(1))
 
 # Exploration of the variable
-hist(data$incomelog)
 summary(data$incomelog)
 
 ######## WEALTH #######
@@ -287,8 +293,7 @@ pcs<-pcs %>%
   rename(ses = PC1)
 
 # Center SES around 0
-pcs$mean_ses <- mean(pcs$ses)
-pcs$ses<- pcs$ses - pcs$mean_ses
+pcs$ses<- scale(pcs$ses)
 summary(pcs$ses)
 
 # Merge with data
@@ -317,3 +322,19 @@ data<-data_complete[myvars]
 
 # Filter to have complete observations
 data <- data[complete.cases(data),] # final N should be 2132
+
+#############################################################################
+############### Standardize variables of interest ##########################
+#############################################################################
+
+# Standardize selected variables
+vars_to_standardize <- c("pgeducation", "ses", "yoe", "incomelog", "wealthlog")
+
+# Apply scaling to the selected variables
+data[vars_to_standardize] <- scale(data[vars_to_standardize])
+
+# Check the result
+summary(data[vars_to_standardize])
+
+# Check the variables independently
+summary(data$pgeducation)

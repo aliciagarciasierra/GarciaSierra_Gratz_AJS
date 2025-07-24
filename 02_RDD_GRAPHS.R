@@ -28,21 +28,3 @@ plotedu<-rdplot(fraction_by_cohort$fraction_age15, fraction_by_cohort$rabyear, c
                 col.lines = "red",
                  title = "")
 
-# d. Plot the graph (second polynomial): FIGURE S1
-plotedu<-rdplot(fraction_by_cohort$fraction_age15, fraction_by_cohort$rabyear, c = 1933 , p=2,
-                y.label="Fraction staying in school until age 15", 
-                x.label="Year of birth",
-                binselect = "qsmvpr",
-                y.lim = c(0, 1),
-                col.lines = "red",
-                title = "")
-
-# e. Plot the graph (third polynomial): FIGURE S2
-plotedu<-rdplot(fraction_by_cohort$fraction_age15, fraction_by_cohort$rabyear, c = 1933 , p=3,
-                y.label="Fraction staying in school until age 15", 
-                x.label="Year of birth",
-                binselect = "qsmvpr",
-                y.lim = c(0, 1),
-                col.lines = "red",
-                title = "")
-

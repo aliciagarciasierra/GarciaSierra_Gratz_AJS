@@ -4,10 +4,39 @@
 ########################################################################
 
 
-#####################################################################
-######## TABLE S2. OPTIMAL BANDWIDTH  ###############################
-#####################################################################
+######################################################################
+######## TABLE A2. MAIN MODELS WITHOUT INTERACTIONS ############################### 
+######################################################################
 
+######################## EDUCATION ############################## 
+m1<- feols(yoe~ treatment + pgeducation + ses +
+             pc1 + pc2 +pc3 + pc4+ pc5 + pc6 + pc7 + pc8 + pc9 + pc10  +
+             timetrend +
+             male,
+           data=data)
+etable(m1, cluster="timetrend", digits = "r3",signif.code = signif_codes) 
+
+
+######################## INCOME ############################## 
+m2<- feols(incomelog~ treatment + pgeducation + ses +
+             pc1 + pc2 +pc3 + pc4+ pc5 + pc6 + pc7 + pc8 + pc9 + pc10  +
+             timetrend +
+             male,
+           data=data)
+etable(m2, cluster="timetrend", digits = "r3",signif.code = signif_codes) 
+
+######################## WEALTH ############################## 
+m3<- feols(wealthlog~ treatment + pgeducation + ses +
+             pc1 + pc2 +pc3 + pc4+ pc5 + pc6 + pc7 + pc8 + pc9 + pc10  +
+             timetrend +
+             male,
+           data=data)
+etable(m3, cluster="timetrend", digits = "r3",signif.code = signif_codes) 
+
+
+#####################################################################
+######## TABLE A3. OPTIMAL BANDWIDTH  ###############################
+#####################################################################
 
 ########################## EDUCATION ################################
 
@@ -91,7 +120,7 @@ etable(m3, cluster="timetrend", digits = "r3",  signif.code = signif_codes)
 
 
 #####################################################################
-######## TABLE S3. PLACEBO TESTS CHANGING THE CUTOFF ################
+######## TABLE A4. PLACEBO TESTS CHANGING THE CUTOFF ################
 #####################################################################
 
 ############################ CUTOFF 1928 ##########################
@@ -302,8 +331,10 @@ m12 <- feols(wealthlog~ treatmentplacebo*pgeducation*ses +
 etable(m12, cluster="timetrend", digits = "r3",  signif.code = signif_codes)
 
 ######################################################################
-######## TABLE S4. GENDER DIFFERENCES  ############################### 
+######## TABLE A5. GENDER DIFFERENCES  ############################### 
 ######################################################################
+
+#------------------ PANEL A -------------------------#
 
 ######################## EDUCATION ############################## 
 
@@ -400,9 +431,48 @@ m3_male <- feols(wealthlog ~ treatment * pgeducation * ses +
 etable(m3_female, cluster = "timetrend", digits = "r3",signif.code = signif_codes)
 etable(m3_male, cluster = "timetrend", digits = "r3",signif.code = signif_codes) 
 
+#------------------ PANEL B -------------------------#
+
+m1_interaction <- feols(yoe ~ treatment  * male *   pgeducation +ses + 
+                          pc1 + pc2 + pc3 + pc4 + pc5 + pc6 + pc7 + pc8 + pc9 + pc10 +  
+                          timetrend +  
+                          timetrend * pc1 + timetrend * pc4 + timetrend * pc7 +  
+                          timetrend * pc2 + timetrend * pc5 + timetrend * pc8 +  
+                          timetrend * pc3 + timetrend * pc6 + timetrend * pc9 + timetrend * pc10 +  
+                          timetrend * pgeducation +  
+                          timetrend * treatment +  
+                          timetrend * ses,  
+                        data = data)
+etable(m1_interaction, cluster = "timetrend", digits = "r3", signif.code = signif_codes)
+
+m2_interaction <- feols(incomelog~ treatment  * male *   pgeducation +ses + 
+                          pc1 + pc2 + pc3 + pc4 + pc5 + pc6 + pc7 + pc8 + pc9 + pc10 +  
+                          timetrend +  
+                          timetrend * pc1 + timetrend * pc4 + timetrend * pc7 +  
+                          timetrend * pc2 + timetrend * pc5 + timetrend * pc8 +  
+                          timetrend * pc3 + timetrend * pc6 + timetrend * pc9 + timetrend * pc10 +  
+                          timetrend * pgeducation +  
+                          timetrend * treatment +  
+                          timetrend * ses,  
+                        data = data)
+etable(m2_interaction, cluster = "timetrend", digits = "r3", signif.code = signif_codes)
+
+
+
+m3_interaction <- feols(wealthlog~ treatment  * male *   pgeducation +ses + 
+                          pc1 + pc2 + pc3 + pc4 + pc5 + pc6 + pc7 + pc8 + pc9 + pc10 +  
+                          timetrend +  
+                          timetrend * pc1 + timetrend * pc4 + timetrend * pc7 +  
+                          timetrend * pc2 + timetrend * pc5 + timetrend * pc8 +  
+                          timetrend * pc3 + timetrend * pc6 + timetrend * pc9 + timetrend * pc10 +  
+                          timetrend * pgeducation +  
+                          timetrend * treatment +  
+                          timetrend * ses,  
+                        data = data)
+etable(m3_interaction, cluster = "timetrend", digits = "r3", signif.code = signif_codes)
 
 #####################################################################
-######## FIGURE S5: THREE WAY INTERACTION FOR MALES ##################
+######## FIGURE A4: THREE WAY INTERACTION FOR MALES ##################
 #####################################################################
 
 a<-plot_model(m3_male, type = "pred", terms = c("pgeducation[-3:3]","ses[-1.1426, -0.2473, 0.7228]", "treatment[0,1]"))
@@ -420,21 +490,26 @@ a<- a+ theme_pilot(axis_title_size = 11,
   scale_color_manual(name = " ", values = line_colors, labels = c("Low SES", "Medium SES", "High SES")) +
   scale_fill_manual(name = " ", values = ribbon_colors, labels = c("Low SES", "Medium SES", "High SES")) 
 
-a$data$facet<- ifelse(a$data$facet== 0, "Non-exposed to the reform",
+a$data$facet<- ifelse(a$data$facet== 0, "Not exposed to the reform",
                       ifelse(a$data$facet== 1, "Exposed to the reform",NA))
 
 # Relevel the facet variable to ensure correct order and labeling
-a$data$facet <- factor(a$data$facet, levels = c("Non-exposed to the reform", "Exposed to the reform"))
+a$data$facet <- factor(a$data$facet, levels = c("Not exposed to the reform", "Exposed to the reform"))
+
+# Adjust size facet titles
+a <- a +
+  theme(
+    strip.text = element_text(size = 14) # Adjust the size as needed
+  )
 
 a
 
 
 ################################################################################
-############## TABLE S5: BINARY EDUCATION LEVEL  ##########################
+############## TABLE A7: BINARY EDUCATION LEVEL  ##########################
 ################################################################################
 
 # Select variables including tertiary binary variable 
-# (note that original data needst to be originated from file 01_DATA_CLEANING)
 
 myvars<-c("idauniq", # id
           "rabyear", # year of birth
@@ -449,14 +524,20 @@ myvars<-c("idauniq", # id
 
 
 # Extract variables of interest
-data<-data_complete[myvars]
+data_tert<-data_complete[myvars]
 
 # Filter to have complete observations
-data <- data[complete.cases(data),] # final N should be 1922
+data_tert <- data_tert[complete.cases(data_tert),] # final N should be 1922
+
+# Standardize selected variables
+vars_to_standardize <- c("pgeducation", "ses", "yoe", "incomelog", "wealthlog")
+
+# Apply scaling to the selected variables
+data_tert[vars_to_standardize] <- scale(data_tert[vars_to_standardize])
 
 # Model
 
-m1<- feglm(tertiary~ treatment*pgeducation*ses +
+m1<- glm(tertiary~ treatment*pgeducation*ses +
              pc1 + pc2 +pc3 + pc4+ pc5 + pc6 + pc7 + pc8 + pc9 + pc10  +
              timetrend +
              timetrend*pc1 + timetrend*pc4 + timetrend*pc7 +
@@ -465,22 +546,55 @@ m1<- feglm(tertiary~ treatment*pgeducation*ses +
              timetrend*pgeducation +
              timetrend*treatment +
              timetrend*ses +
-             male
-           , data=data)
+             male,
+         family = binomial(link = "logit")
+           , data=data_tert)
+
+summary(m1, cluster="timetrend", digits = "r3",signif.code = signif_codes) 
+
+
+# Compute Average Marginal Effects
+ames_inter<- slopes(m1, variables="pgeducation", by="treatment")
+ames_inter
+
+######################################################################
+######## TABLE A12. SCARR-ROWE TEST ############################### 
+######################################################################
+
+######################## EDUCATION ############################## 
+m1<- feols(yoe~ treatment + pgeducation*ses +
+             pc1 + pc2 +pc3 + pc4+ pc5 + pc6 + pc7 + pc8 + pc9 + pc10  +
+             timetrend +
+             male,
+           data=data)
 etable(m1, cluster="timetrend", digits = "r3",signif.code = signif_codes) 
 
+####################x#### INCOME ############################## 
+m2<- feols(incomelog~ treatment + pgeducation*ses +
+             pc1 + pc2 +pc3 + pc4+ pc5 + pc6 + pc7 + pc8 + pc9 + pc10  +
+             timetrend +
+             male,
+           data=data)
+etable(m2, cluster="timetrend", digits = "r3",signif.code = signif_codes) 
 
+######################## WEALTH ############################## 
+m3<- feols(wealthlog~ treatment + pgeducation*ses +
+             pc1 + pc2 +pc3 + pc4+ pc5 + pc6 + pc7 + pc8 + pc9 + pc10  +
+             timetrend +
+             male,
+           data=data)
+etable(m3, cluster="timetrend", digits = "r3",signif.code = signif_codes) 
 
 #########################################################################
-######## FIGURE S6: AVERAGE PGI BY COHORT, SELECTION INTO DYING  ########
+######## FIGURE A5: AVERAGE PGI BY COHORT, SELECTION INTO DYING  ########
 #########################################################################
 
 # Calculate mean and 95% confidence intervals by cohort
 cohort_data <- data %>%
   group_by(rabyear) %>%
-  summarise(mean_pgeducation = mean(pgeducation),
-            ci_lower = tidy(t.test(pgeducation))$conf.low,
-            ci_upper = tidy(t.test(pgeducation))$conf.high)
+  summarise(mean_pgeducation = mean(pgeducation, na.rm = TRUE),
+            ci_lower = tidy(t.test(pgeducation, na.action = na.omit))$conf.low,
+            ci_upper = tidy(t.test(pgeducation, na.action = na.omit))$conf.high)
 
 # View the resulting cohort_data data frame
 cohort_data
@@ -499,3 +613,234 @@ ggplot(data = cohort_data, aes(x = rabyear, y = mean_pgeducation)) +
               legend_text_size = 12,
               legend_title_size = 12,
               legend_position= "bottom") # Colors for the three groups
+
+#########################################################################
+######## TABLE A6. Results accounting for mortality selection IPW  ########
+#########################################################################
+
+# Prepare the variables for the weights
+data_complete <- data_complete %>%
+  rename(
+    selfhealth = r1shlt,   # self-rated health
+    limitwork = r2hlthlm,  # limits to do work
+    dailylimit = r1walkra, # functional limits in daily activities
+    mobprob = r1mobilb,    # difficulties in mobility
+    depressed = r1depres,  # mental health problems
+    diagnoses = r1hibpe,   # Doctor Diagnosed Health Problems: Ever Have Condition
+    alzheimer = r1alzhe,   # Doctor Diagnosed Health Problems: Memory-Related Disease
+    smoking = r1smokev,    # Health Behaviors: Smoking (Cigarettes)
+    diabetes = r2diabs     # Reported diabetes
+  )
+
+# Select variables of interest #
+
+myvars<-c("idauniq", "radyear", "ses", "selfhealth", "limitwork", "dailylimit", "mobprob", "depressed", "diagnoses", "alzheimer", "smoking", "diabetes")
+ipw<-data_complete[myvars]
+
+# Create treatment variable for those who die before 2013 (when PGIs are obtained)
+# We assume that if it hasn't been reported by 2012 the year of death is that they were still alive (even if in the data it figures as NA because the question is year of death)
+ipw<- ipw %>% 
+  mutate(dummy = if_else(!is.na(radyear), 1, 0, missing = 0))
+
+# Merge with existent database #
+
+data_ipw<-merge(data, ipw, by=c("idauniq"),all.x=TRUE)
+data_ipw <- data_ipw %>% select(-radyear)
+
+# Get the weights using the confounders
+
+data_ipw <- data_ipw[complete.cases(data_ipw), ]
+
+weights_weightit <- weightit(dummy ~ ses.x + selfhealth + limitwork +
+                               dailylimit + mobprob + diagnoses +
+                               alzheimer + smoking + diabetes,
+                             data = data_ipw, method = "ps")
+
+summary(weights_weightit$weights)
+
+# Merge the weights to the existent data #
+data_weights<- data_ipw %>% 
+  mutate(ipw = weights_weightit$weights)
+
+# Models #
+m1<- lm(yoe~ pgeducation*treatment + 
+          pc1 + pc2 +pc3 + pc4+ pc5 + pc6 + pc7 + pc8 + pc9 + pc10  +
+          timetrend +male,
+            weights=ipw,
+           data=data_weights)
+
+summary(m1, cluster="timetrend", digits = "r3")
+
+m2<- lm(incomelog~ pgeducation*treatment + 
+          pc1 + pc2 +pc3 + pc4+ pc5 + pc6 + pc7 + pc8 + pc9 + pc10  +
+          timetrend + male,
+        weights=ipw,
+        data=data_weights)
+
+summary(m2, cluster="timetrend", digits = "r3")
+
+
+m3<- lm(wealthlog~ pgeducation*treatment + 
+          pc1 + pc2 +pc3 + pc4+ pc5 + pc6 + pc7 + pc8 + pc9 + pc10  +
+          timetrend + male,
+        weights=ipw,
+        data=data_weights)
+
+summary(m3, cluster="timetrend", digits = "r3")
+ 
+###############################################################################
+######## TABLE A9. Non-linear effects for income and wealth ############################### 
+###############################################################################
+
+# GLM  non-linear modeling for income
+m1 <- glm(
+  incomelog ~ pgeducation * treatment + I(pgeducation^2)*treatment +
+    pc1 + pc2 + pc3 + pc4 + pc5 + pc6 + pc7 + pc8 + pc9 + pc10 +
+    timetrend +
+    timetrend * pc1 + timetrend * pc4 + timetrend * pc7 +
+    timetrend * pc2 + timetrend * pc5 + timetrend * pc8 +
+    timetrend * pc3 + timetrend * pc6 + timetrend * pc9 + timetrend * pc10 +
+    timetrend * pgeducation +
+    timetrend * treatment,
+  family = gaussian(link = "identity"),
+  data = data
+)
+summary(m1, cluster="timetrend", digits = "r3")
+
+# GLM  non-linear modeling for wealth
+m2 <- glm(
+  wealthlog ~ pgeducation * treatment + I(pgeducation^2)*treatment +
+    pc1 + pc2 + pc3 + pc4 + pc5 + pc6 + pc7 + pc8 + pc9 + pc10 +
+    timetrend +
+    timetrend * pc1 + timetrend * pc4 + timetrend * pc7 +
+    timetrend * pc2 + timetrend * pc5 + timetrend * pc8 +
+    timetrend * pc3 + timetrend * pc6 + timetrend * pc9 + timetrend * pc10 +
+    timetrend * pgeducation +
+    timetrend * treatment,
+  family = gaussian(link = "identity"),
+  data = data
+)
+summary(m2)
+
+
+###############################################################################
+######## Table A10: Results with non linear time trends ############################### 
+###############################################################################
+
+
+m1 <- feols(yoe ~ treatment*pgeducation*ses +
+              pc1 + pc2 + pc3 + pc4 + pc5 + pc6 + pc7 + pc8 + pc9 + pc10 +
+              timetrend + I(timetrend^2) + I(timetrend^3) +
+              timetrend*pc1 + timetrend*pc4 + timetrend*pc7 +
+              timetrend*pc2 + timetrend*pc5 + timetrend*pc8 +
+              timetrend*pc3 + timetrend*pc6 + timetrend*pc9 + timetrend*pc10 +
+              timetrend*pgeducation +
+              timetrend*treatment +
+              timetrend*ses +
+              male,
+            data = data)
+etable(m1, cluster="timetrend", digits = "r3",signif.code = signif_codes )
+
+
+m2 <- feols(incomelog ~ treatment*pgeducation*ses +
+              pc1 + pc2 + pc3 + pc4 + pc5 + pc6 + pc7 + pc8 + pc9 + pc10 +
+              timetrend + I(timetrend^2) + I(timetrend^3) +
+              timetrend*pc1 + timetrend*pc4 + timetrend*pc7 +
+              timetrend*pc2 + timetrend*pc5 + timetrend*pc8 +
+              timetrend*pc3 + timetrend*pc6 + timetrend*pc9 + timetrend*pc10 +
+              timetrend*pgeducation +
+              timetrend*treatment +
+              timetrend*ses +
+              male,
+            data = data)
+etable(m2, cluster="timetrend", digits = "r3",signif.code = signif_codes)
+
+
+
+m3<- feols(wealthlog ~ treatment*pgeducation*ses +
+              pc1 + pc2 + pc3 + pc4 + pc5 + pc6 + pc7 + pc8 + pc9 + pc10 +
+              timetrend + I(timetrend^2) + I(timetrend^3) +
+              timetrend*pc1 + timetrend*pc4 + timetrend*pc7 +
+              timetrend*pc2 + timetrend*pc5 + timetrend*pc8 +
+              timetrend*pc3 + timetrend*pc6 + timetrend*pc9 + timetrend*pc10 +
+              timetrend*pgeducation +
+              timetrend*treatment +
+              timetrend*ses +
+              male,
+            data = data)
+etable(m3, cluster="timetrend", digits = "r3",signif.code = signif_codes)
+
+###############################################################################
+######## Table A11: Including 1933 ############################### 
+###############################################################################
+
+# Filter for alternative treatments
+
+# Select variables
+myvars<-c("idauniq", # id
+          "rabyear", # year of birth
+          "timetrend", #time trend
+          "alt_treatment", #treatment alt
+          "yoe",  "incomelog", "wealthlog",  #outcomes 
+          "pgeducation", "pgeducationgroups", # PGI
+          "pc1", "pc2", "pc3", "pc4", "pc5", "pc6", "pc7", "pc8", "pc9", "pc10", # principal components
+          "male", "ses", # ascribed charactersitics
+          "raedyrs_e") #raw years of education for RDD graphs
+
+
+# Extract variables of interest
+data_1933<-data_complete[myvars]
+
+# Filter to have complete observations
+data_1933<- data_1933[complete.cases(data_1933),] 
+
+# Standardize selected variables
+vars_to_standardize <- c("pgeducation", "ses", "yoe", "incomelog", "wealthlog")
+
+# Apply scaling to the selected variables
+data_1933[vars_to_standardize] <- scale(data_1933[vars_to_standardize])
+
+
+m1<- feols(yoe~ alt_treatment*pgeducation*ses +
+             pc1 + pc2 +pc3 + pc4+ pc5 + pc6 + pc7 + pc8 + pc9 + pc10  +
+             timetrend +
+             timetrend*pc1 + timetrend*pc4 + timetrend*pc7 +
+             timetrend*pc2 + timetrend*pc5 + timetrend*pc8 +
+             timetrend*pc3 + timetrend*pc6 + timetrend*pc9 + timetrend*pc10 +
+             timetrend*pgeducation +
+             timetrend*alt_treatment +
+             timetrend*ses +
+             male,
+           data=data_1933)
+
+etable(m1, cluster="timetrend", digits = "r3",signif.code = signif_codes)
+
+
+m2<- feols(incomelog~ alt_treatment*pgeducation*ses +
+             pc1 + pc2 +pc3 + pc4+ pc5 + pc6 + pc7 + pc8 + pc9 + pc10  +
+             timetrend +
+             timetrend*pc1 + timetrend*pc4 + timetrend*pc7 +
+             timetrend*pc2 + timetrend*pc5 + timetrend*pc8 +
+             timetrend*pc3 + timetrend*pc6 + timetrend*pc9 + timetrend*pc10 +
+             timetrend*pgeducation +
+             timetrend*alt_treatment +
+             timetrend*ses +
+             male,
+           data=data_1933)
+
+etable(m2, cluster="timetrend", digits = "r3",signif.code = signif_codes)
+
+m3<- feols(wealthlog~ alt_treatment*pgeducation*ses +
+             pc1 + pc2 +pc3 + pc4+ pc5 + pc6 + pc7 + pc8 + pc9 + pc10  +
+             timetrend +
+             timetrend*pc1 + timetrend*pc4 + timetrend*pc7 +
+             timetrend*pc2 + timetrend*pc5 + timetrend*pc8 +
+             timetrend*pc3 + timetrend*pc6 + timetrend*pc9 + timetrend*pc10 +
+             timetrend*pgeducation +
+             timetrend*alt_treatment +
+             timetrend*ses +
+             male,
+           data=data_1933)
+
+etable(m3, cluster="timetrend", digits = "r3",signif.code = signif_codes)
+

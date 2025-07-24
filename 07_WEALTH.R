@@ -17,7 +17,7 @@ m7 <- feols(wealthlog~ pgeducation*treatment +
            timetrend*treatment,
            data=data)
 
-etable(m7, cluster="timetrend", digits="r3")
+etable(m7, cluster="timetrend", digits="r3", signif.code = signif_codes)
 
 ############################################################################
 ############### Second model: only ascribed characteristics ############### 
@@ -28,7 +28,7 @@ m8<- feols(wealthlog~ treatment*ses+
           timetrend*treatment + 
           male, data=data)
 
-etable(m8, cluster="timetrend", digits="r3")
+etable(m8, cluster="timetrend", digits="r3", signif.code = signif_codes)
 
 #######################################################################################
 ############### Third model: genetic factors and ascribed characteristics ############### 
@@ -46,6 +46,6 @@ m9<- feols(wealthlog~ treatment*pgeducation*ses +
           male
         , data=data)
 
-etable(m9, cluster="timetrend", digits="r3")
+etable(m9, cluster="timetrend", digits="r3", signif.code = signif_codes)
 
 

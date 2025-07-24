@@ -20,9 +20,10 @@ education <-
   ggplot(interaction_df, aes(x = pgeducation, y = fit, color = treatment)) +
   geom_line(aes(group = treatment), size = 1, linetype = "solid") +
   geom_ribbon(aes(ymin = lower, ymax = upper, fill = treatment), alpha = 0.2) +
-  scale_color_manual(name = "Treatment", values = line_colors, labels = c("Non-exposed to the reform", "Exposed to the reform")) +
-  scale_fill_manual(name = "Treatment", values = ribbon_colors, labels = c("Non-exposed to the reform", "Exposed to the reform")) +
- theme_pilot(axis_title_size = 11,
+  scale_color_manual(name = "Treatment", values = line_colors, labels = c("Not exposed to the reform", "Exposed to the reform")) +
+  scale_fill_manual(name = "Treatment", values = ribbon_colors, labels = c("Not exposed to the reform", "Exposed to the reform")) +
+  scale_y_continuous(limits = c(-2, 2)) +
+  theme_pilot(axis_title_size = 11,
               axis_text_size = 11,
               legend_text_size = 12,
               legend_title_size = 12,
@@ -50,8 +51,9 @@ income <-
   ggplot(interaction_df, aes(x = pgeducation, y = fit, color = treatment)) +
   geom_line(aes(group = treatment), size = 1, linetype = "solid") +
   geom_ribbon(aes(ymin = lower, ymax = upper, fill = treatment), alpha = 0.2) +
-  scale_color_manual(name = "Treatment", values = line_colors, labels = c("Non-exposed to the reform", "Exposed to the reform")) +
-  scale_fill_manual(name = "Treatment", values = ribbon_colors, labels = c("Non-exposed to the reform", "Exposed to the reform")) +
+  scale_color_manual(name = "Treatment", values = line_colors, labels = c("Not exposed to the reform", "Exposed to the reform")) +
+  scale_fill_manual(name = "Treatment", values = ribbon_colors, labels = c("Not exposed to the reform", "Exposed to the reform")) +
+  scale_y_continuous(limits = c(-2, 2)) +
   theme_pilot(axis_title_size = 11,
               axis_text_size = 11,
               legend_text_size = 12,
@@ -78,8 +80,9 @@ wealth <-
   ggplot(interaction_df, aes(x = pgeducation, y = fit, color = treatment)) +
   geom_line(aes(group = treatment), size = 1, linetype = "solid") +
   geom_ribbon(aes(ymin = lower, ymax = upper, fill = treatment), alpha = 0.2) +
-  scale_color_manual(name = "Treatment", values = line_colors, labels = c("Non-exposed to the reform", "Exposed to the reform")) +
-  scale_fill_manual(name = "Treatment", values = ribbon_colors, labels = c("Non-exposed to the reform", "Exposed to the reform")) +
+  scale_color_manual(name = "Treatment", values = line_colors, labels = c("Not exposed to the reform", "Exposed to the reform")) +
+  scale_fill_manual(name = "Treatment", values = ribbon_colors, labels = c("Not exposed to the reform", "Exposed to the reform")) +
+  scale_y_continuous(limits = c(-2, 2)) +
   theme_pilot(axis_title_size = 11,
               axis_text_size = 11,
               legend_text_size = 12,
@@ -116,7 +119,8 @@ a <- a+ theme_pilot(axis_title_size = 11,
                     axis_text_size = 11,
                     legend_text_size = 12,
                     legend_title_size = 12,
-                    legend_position= "right") +
+                    legend_position= "right",
+                    title_size = 13) +
   labs(x= "PGI",
        y = "Predicted years of education") +
   ggtitle(" ") +
@@ -126,11 +130,17 @@ a <- a+ theme_pilot(axis_title_size = 11,
   scale_fill_manual(name = " ", values = ribbon_colors, labels = c("Low SES", "Medium SES", "High SES")) 
 
 # Rename the facts
-a$data$facet<- ifelse(a$data$facet== 0, "Non-exposed to the reform",
+a$data$facet<- ifelse(a$data$facet== 0, "Not exposed to the reform",
                       ifelse(a$data$facet== 1, "Exposed to the reform",NA))
 
 # Relevel the facet variable to ensure correct order and labeling
-a$data$facet <- factor(a$data$facet, levels = c("Non-exposed to the reform", "Exposed to the reform"))
+a$data$facet <- factor(a$data$facet, levels = c("Not exposed to the reform", "Exposed to the reform"))
+
+# Adjust size facet titles
+a <- a +
+  theme(
+    strip.text = element_text(size = 14) # Adjust the size as needed
+  )
 
 # Final plot
 a

@@ -15,7 +15,7 @@
    # d) Principal components data from ELSA (2022)
 # All available to download from the UK Data Service 
 
-# Date of preparation of this script: July 2024
+# Date of preparation of this script: Nov 2024
 
 #######################################################
 #########   PREPARE THE ENVIRONMENT ################
@@ -48,6 +48,11 @@ library(ggpubr)
 library(sjPlot)
 library(sjmisc)
 library(broom)
+library(marginaleffects)
+library(scales)
+library(WeightIt)
+library(boot)
+library(patchwork)
 
 
 # SET WD 
