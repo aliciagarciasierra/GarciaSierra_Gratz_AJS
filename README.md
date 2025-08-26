@@ -1,6 +1,6 @@
 REPLICATION INSTRUCTIONS
 
-Does an Educational Reform Moderate the Relationship between Genes and Life Chances? Evidence from the United Kingdom.
+Does Expanding Free Secondary Education Moderate the Relationship between Genes and Socioeconomic Outcomes? Evidence from the Education Act of 1944 in England.
 
 Authors: García-Sierra, Alicia & Grätz, Michael
 
@@ -23,9 +23,9 @@ Files for replication:
 
 01_DATA_CLEANING: opens datasets and prepares variables of interest
 
-02_RDD_GRAPHS: produces Figure 1, Figure S1 and Figure S2 
+02_RDD_GRAPHS: produces Figure 1, Figure A1 and Figure A2 
 
-03_DESCRIPTIVES: produces Table 1, Figure 3, Figure S3 and Figure S4
+03_DESCRIPTIVES: produces Table 1, Figure 3, Figure A3 and Figure A4
 
 04_BALANCE_TESTS: produces Figure 2
 
@@ -37,7 +37,7 @@ Files for replication:
 
 08_FIGURES_INTERACTIONS: produces Figure 4 and Figure 5
 
-09_ROBUSTNESS: produces Tables S2, S3, S4 and S5, and Figures S5 and S6
+09_ROBUSTNESS: produces tables and figures from the Online Appendix
 
 10_POWER_TESTS: runs the power tests for the interactions
 
