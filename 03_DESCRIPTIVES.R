@@ -24,9 +24,8 @@ cor_matrix <- round(cor(vars_of_interest, use = "complete.obs"), 2)
 print(cor_matrix)
 
 ###################################################################################################
-################# FIGURE PGI coefficients on education pre and post trend ##################################
+################# FIGURE PGI coefficients on education, income, and wealth, pre and post trend ##################################
 ###################################################################################################
-
 
 # Select variables
 myvars<-c("idauniq", # id
@@ -74,37 +73,51 @@ coefs$period <- ifelse(coefs$rabyear <= 1932, "Not exposed to the reform", "Expo
 # Ensure period is a factor and set the order explicitly
 coefs$period <- factor(coefs$period, levels = c("Not exposed to the reform", "Exposed to the reform"))
 
-# Plotting
+
+# --- helper: pick Arial 
+font_family <- if ("Arial" %in% systemfonts::system_fonts()$family) "Arial" else "sans"
+
+# ------------------------- EDUCATION -------------------------
 education <- ggplot(coefs, aes(x = rabyear, y = estimate, color = period, shape = period)) +
-  geom_point(alpha = 0.8, size = 3) +  # Larger, more opaque points with distinct shapes
-  geom_smooth(method = "lm", se = FALSE, linetype = "dashed", size = 1.2) +  # Thicker dashed trend lines
-  scale_color_manual(values = c("coral2", "skyblue2"),  # Keep color mapping but reordered
-                     labels = c("Not exposed to the reform", "Exposed to the reform")) +  
-  scale_shape_manual(values = c(16, 17),  # Keep shape mapping but reordered
-                     labels = c("Not exposed to the reform", "Exposed to the reform")) +  
-  scale_x_continuous(breaks = seq(min(coefs$rabyear), max(coefs$rabyear), by = 1)) +  # Yearly x-axis ticks
-  scale_y_continuous(breaks = seq(-1, 1, by = 0.25)) +  # Cleaner y-axis ticks
-  labs(x = "Year of birth", y = "PGI coefficient", 
-       title = "Education",
-       color = " ", shape = " ") +  # Set one legend title
-  guides(color = guide_legend(order = 1),  # Ensures color & shape legend are ordered together
-         shape = guide_legend(order = 1)) +  
-  theme_pilot(axis_title_size = 10,
-              axis_text_size = 10,
-              legend_text_size = 10,
-              legend_title_size = 12,
-              legend_position = "bottom") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1),
-        # Reduce space between x-axis title and x-axis text
-        axis.title.x = element_text(margin = margin(t = 1, unit = "pt")),
-        # Reduce space between y-axis title and y-axis text
-        axis.title.y = element_text(margin = margin(r = 1, unit = "pt")))
+  geom_point(alpha = 0.8, size = 3) +
+  geom_smooth(method = "lm", se = FALSE, linetype = "dashed", linewidth = 1.2) +
+  scale_color_manual(values = c("coral2", "skyblue2"),
+                     labels = c("Not exposed to the reform", "Exposed to the reform")) +
+  scale_shape_manual(values = c(16, 17),
+                     labels = c("Not exposed to the reform", "Exposed to the reform")) +
+  scale_x_continuous(
+    breaks = seq(min(coefs$rabyear), max(coefs$rabyear), by = 1),
+    sec.axis = dup_axis(name = NULL)          # top axis (ticks only)
+  ) +
+  scale_y_continuous(
+    breaks = seq(-1, 1, by = 0.25),
+    sec.axis = dup_axis(name = NULL)          # right axis (ticks only)
+  ) +
+  labs(x = "Year of birth", y = "PGI coefficient", title = "Education", color = " ", shape = " ") +
+  guides(color = guide_legend(order = 1), shape = guide_legend(order = 1)) +
+  theme_pilot(axis_title_size = 12, axis_text_size = 10, legend_text_size = 10,
+              legend_title_size = 12, legend_position = "bottom") +
+  theme(
+    text = element_text(family = font_family),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    axis.title.x = element_text(margin = margin(t = 1, unit = "pt")),
+    axis.title.y = element_text(margin = margin(r = 1, unit = "pt")),
+    # draw a full box and ticks on all sides
+    panel.border = element_rect(color = "black", fill = NA, linewidth = 0.6),
+    axis.line = element_line(),                              # ensures axis lines are drawn
+    axis.ticks.length = unit(2, "pt"),
+    axis.ticks.length.x.top = unit(2, "pt"),
+    axis.ticks.length.y.right = unit(2, "pt"),
+    # hide duplicate labels on top/right (ticks remain)
+    axis.text.x.top = element_blank(),
+    axis.title.x.top = element_blank(),
+    axis.text.y.right = element_blank(),
+    axis.title.y.right = element_blank()
+  )
+education
+# ------------------------- INCOME -------------------------
 
-###################################################################################################
-################# FIGURE PGI coefficients on income with pre and post trend ##################################
-###################################################################################################
-
-# Filter for the years of interest
+#Filter for the years of interest
 data_filtered <- data_figures %>% filter(rabyear >= 1922 & rabyear <= 1944)
 
 # Establish reference category
@@ -132,38 +145,42 @@ coefs$period <- ifelse(coefs$rabyear <= 1932, "Not exposed to the reform", "Expo
 # Ensure period is a factor and set the order explicitly
 coefs$period <- factor(coefs$period, levels = c("Not exposed to the reform", "Exposed to the reform"))
 
-# Plotting
 income <- ggplot(coefs, aes(x = rabyear, y = estimate, color = period, shape = period)) +
-  geom_point(alpha = 0.8, size = 3) +  # Larger, more opaque points with distinct shapes
-  geom_smooth(method = "lm", se = FALSE, linetype = "dashed", size = 1.2) +  # Thicker dashed trend lines
-  scale_color_manual(values = c("coral2", "skyblue2"),  # Keep color mapping but reordered
-                     labels = c("Not exposed to the reform", "Exposed to the reform")) +  
-  scale_shape_manual(values = c(16, 17),  # Keep shape mapping but reordered
-                     labels = c("Not exposed to the reform", "Exposed to the reform")) +  
-  scale_x_continuous(breaks = seq(min(coefs$rabyear), max(coefs$rabyear), by = 1)) +  # Yearly x-axis ticks
-  scale_y_continuous(breaks = seq(-1, 1, by = 0.25)) +  # Cleaner y-axis ticks
-  labs(x = "Year of birth", y = "PGI coefficient", 
-       title = "Income",
-       color = " ", shape = " ") +  # Set one legend title
-  guides(color = guide_legend(order = 1),  # Ensures color & shape legend are ordered together
-         shape = guide_legend(order = 1)) +  
-  theme_pilot(axis_title_size = 10,
-              axis_text_size = 10,
-              legend_text_size = 10,
-              legend_title_size = 12,
-              legend_position = "bottom") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1),
-        # Reduce space between x-axis title and x-axis text
-        axis.title.x = element_text(margin = margin(t = 1, unit = "pt")),
-        # Reduce space between y-axis title and y-axis text
-        axis.title.y = element_text(margin = margin(r = 1, unit = "pt")))
-
-
-
-###################################################################################################
-################# FIGURE PGI coefficients on wealth with pre and post trend ##################################
-###################################################################################################
-
+  geom_point(alpha = 0.8, size = 3) +
+  geom_smooth(method = "lm", se = FALSE, linetype = "dashed", linewidth = 1.2) +
+  scale_color_manual(values = c("coral2", "skyblue2"),
+                     labels = c("Not exposed to the reform", "Exposed to the reform")) +
+  scale_shape_manual(values = c(16, 17),
+                     labels = c("Not exposed to the reform", "Exposed to the reform")) +
+  scale_x_continuous(
+    breaks = seq(min(coefs$rabyear), max(coefs$rabyear), by = 1),
+    sec.axis = dup_axis(name = NULL)
+  ) +
+  scale_y_continuous(
+    breaks = seq(-1, 1, by = 0.25),
+    sec.axis = dup_axis(name = NULL)
+  ) +
+  labs(x = "Year of birth", y = "PGI coefficient", title = "Income", color = " ", shape = " ") +
+  guides(color = guide_legend(order = 1), shape = guide_legend(order = 1)) +
+  theme_pilot(axis_title_size = 12, axis_text_size = 10, legend_text_size = 10,
+              legend_title_size = 12, legend_position = "bottom") +
+  theme(
+    text = element_text(family = font_family),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    axis.title.x = element_text(margin = margin(t = 1, unit = "pt")),
+    axis.title.y = element_text(margin = margin(r = 1, unit = "pt")),
+    panel.border = element_rect(color = "black", fill = NA, linewidth = 0.6),
+    axis.line = element_line(),
+    axis.ticks.length = unit(2, "pt"),
+    axis.ticks.length.x.top = unit(2, "pt"),
+    axis.ticks.length.y.right = unit(2, "pt"),
+    axis.text.x.top = element_blank(),
+    axis.title.x.top = element_blank(),
+    axis.text.y.right = element_blank(),
+    axis.title.y.right = element_blank()
+  )
+income
+# ------------------------- WEALTH -------------------------
 # Filter for the years of interest
 data_filtered <- data_figures %>% filter(rabyear >= 1922 & rabyear <= 1944)
 
@@ -191,33 +208,43 @@ coefs$period <- ifelse(coefs$rabyear <= 1932, "Not exposed to the reform", "Expo
 # Ensure period is a factor and set the order explicitly
 coefs$period <- factor(coefs$period, levels = c("Not exposed to the reform", "Exposed to the reform"))
 
+
 wealth <- ggplot(coefs, aes(x = rabyear, y = estimate, color = period, shape = period)) +
   geom_point(alpha = 0.8, size = 3) +
-  geom_smooth(method = "lm", se = FALSE, linetype = "dashed", size = 1.2) +
+  geom_smooth(method = "lm", se = FALSE, linetype = "dashed", linewidth = 1.2) +
   scale_color_manual(values = c("coral2", "skyblue2"),
-                     labels = c("Not exposed to the reform", "Exposed to the reform")) +  
+                     labels = c("Not exposed to the reform", "Exposed to the reform")) +
   scale_shape_manual(values = c(16, 17),
-                     labels = c("Not exposed to the reform", "Exposed to the reform")) +  
-  scale_x_continuous(breaks = seq(min(coefs$rabyear), max(coefs$rabyear), by = 1)) +
-  scale_y_continuous(breaks = seq(-1, 1, by = 0.25)) +
-  labs(x = "Year of birth", y = "PGI coefficient", 
-       title = "Wealth",
-       color = " ", shape = " ") +
-  guides(color = guide_legend(order = 1),
-         shape = guide_legend(order = 1)) +  
-  theme_pilot(axis_title_size = 10,
-              axis_text_size = 10,
-              legend_text_size = 10,
-              legend_title_size = 12,
-              legend_position = "bottom") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1),
-        # Reduce space between x-axis title and x-axis text
-        axis.title.x = element_text(margin = margin(t = 1, unit = "pt")),
-        # Reduce space between y-axis title and y-axis text
-        axis.title.y = element_text(margin = margin(r = 1, unit = "pt")))
-
-#-------- combine the three figures  --------------------#
-
+                     labels = c("Not exposed to the reform", "Exposed to the reform")) +
+  scale_x_continuous(
+    breaks = seq(min(coefs$rabyear), max(coefs$rabyear), by = 1),
+    sec.axis = dup_axis(name = NULL)
+  ) +
+  scale_y_continuous(
+    breaks = seq(-1, 1, by = 0.25),
+    sec.axis = dup_axis(name = NULL)
+  ) +
+  labs(x = "Year of birth", y = "PGI coefficient", title = "Wealth", color = " ", shape = " ") +
+  guides(color = guide_legend(order = 1), shape = guide_legend(order = 1)) +
+  theme_pilot(axis_title_size = 12, axis_text_size = 10, legend_text_size = 12,
+              legend_title_size = 14, legend_position = "bottom") +
+  theme(
+    text = element_text(family = font_family),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    axis.title.x = element_text(margin = margin(t = 1, unit = "pt")),
+    axis.title.y = element_text(margin = margin(r = 1, unit = "pt")),
+    panel.border = element_rect(color = "black", fill = NA, linewidth = 0.6),
+    axis.line = element_line(),
+    axis.ticks.length = unit(2, "pt"),
+    axis.ticks.length.x.top = unit(2, "pt"),
+    axis.ticks.length.y.right = unit(2, "pt"),
+    axis.text.x.top = element_blank(),
+    axis.title.x.top = element_blank(),
+    axis.text.y.right = element_blank(),
+    axis.title.y.right = element_blank()
+  )
+wealth
+# ------------------------- Combine with shared legend -------------------------
 # Function to extract the legend 
 extract_legend <- function(my_ggplot) {
   # Get the ggplot grob (graphical object)
@@ -238,39 +265,37 @@ extract_legend <- function(my_ggplot) {
 # Extract the legend from the wealth plot
 legend <- extract_legend(wealth)
 
-# Combined theme adjustments for each plot
-plot_education <- education + 
-  theme(
-    legend.position = "none",
-    plot.margin = margin(b = 4, t = 1.5, l = 2, r = 0, unit = "pt"),
-    plot.title = element_text(hjust = 0.5, size=14, face="bold"),
-  )
-
-plot_income <- income + 
-  theme(
-    legend.position = "none",
-    plot.margin = margin(b = 4, t = 1.5, l = 2, r = 0, unit = "pt"),
-    plot.title = element_text(hjust = 0.5, size=14, face="bold"),
-  )
+plot_education <- education + theme(legend.position = "none",
+                                    plot.margin = margin(b = 4, t = 1.5, l = 2, r = 0, unit = "pt"),
+                                    plot.title = element_text(hjust = 0.5, size = 14, face = "bold", family = font_family))
 
 
-plot_wealth <- wealth + 
-  theme(
-    legend.position = "none",
-    plot.margin = margin(b = 4, t = 1.5, l = 2, r = 0, unit = "pt"),
-    plot.title = element_text(hjust = 0.53, size=14, face="bold"),
-  )
+plot_income <- income + theme(legend.position = "none",
+                              plot.margin = margin(b = 4, t = 1.5, l = 2, r = 0, unit = "pt"),
+                              plot.title = element_text(hjust = 0.5, size = 14, face = "bold", family = font_family))
 
-# Now combine with zero padding
-combined_plot_tight <- gridExtra::grid.arrange(
-  plot_education,
-  plot_income,
-  plot_wealth,
-  legend,
-  ncol = 1,
-  heights = c(1, 1, 1, 0.3),
-  padding = 0
+plot_wealth <- wealth + theme(legend.position = "none",
+                              plot.margin = margin(b = 4, t = 1.5, l = 2, r = 0, unit = "pt"),
+                              plot.title = element_text(hjust = 0.5, size = 14, face = "bold", family = font_family))
+
+# Saveable grob
+combined_plot <- gridExtra::arrangeGrob(
+  plot_education, plot_income, plot_wealth, legend,
+  ncol = 1, heights = c(1, 1, 1, 0.3), padding = 0
 )
+
+#  EXPORT TO TIFF 
+ggplot2::ggsave(
+  filename = "fig1.tiff",
+  plot = combined_plot,
+  device = ragg::agg_tiff,   # force ragg's TIFF device
+  dpi = 600,
+  width = 180, height = 220, units = "mm",
+  compression = "lzw"
+)
+
+
+
 
 ###################################################################################################
 ################# FIGURE PGI coefficients on education by SES with pre and post trend ##################################
