@@ -9,9 +9,13 @@ Journal: American Journal of Sociology
  Data sets needed:
 
    a) ELSA harmonized data set (h_elsa_g3.dta) 
+   
    b) Wave 3 ELSA life history data (wave_3_life_history_data.dta)
+   
    c) Polygenic scores from ELSA (2022) (list_pgs_scores_elsa_2022.dta)
+   
    d) Principal components from ELSA (2022) (principal_components_elsa_2022.dta)
+   
 
 All these datasets are available to download from the UK Data Service.
 
