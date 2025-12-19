@@ -48,20 +48,17 @@ library(broom)
 library(marginaleffects)
 library(scales)
 library(WeightIt)
-library(boot)
 library(patchwork)
 library(ragg)
 library(cowplot)
+library(effects)
 
 
 # SET WD 
 
 setwd("~/Documents/EDUCATIONAL REFORMS ELSA/DATA")
 
-# SET THEME FOR GRAPHS
-
-set_pilot_family("Avenir Next Medium", title_family = "Avenir Next Demi Bold")
-
 # SET SIGNIFICANCE LEVELS MARKS
 
 signif_codes <- c( "***" = 0.01, "**" = 0.05, "*" = 0.1)
+

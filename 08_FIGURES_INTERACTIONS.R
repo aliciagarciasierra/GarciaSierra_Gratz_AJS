@@ -40,7 +40,7 @@ education <-
   scale_fill_manual(name = "Treatment", values = ribbon_colors,
                     labels = c("Not exposed to the reform", "Exposed to the reform")) +
   scale_y_continuous(limits = c(-2, 2)) +
-  theme_pilot(axis_title_size = 14,
+  theme(axis_title_size = 14,
               axis_text_size = 12,
               legend_text_size = 12,
               legend_title_size = 14,
@@ -65,7 +65,7 @@ income <-
   scale_fill_manual(name = "Treatment", values = ribbon_colors,
                     labels = c("Not exposed to the reform", "Exposed to the reform")) +
   scale_y_continuous(limits = c(-2, 2)) +
-  theme_pilot(axis_title_size = 14,
+  theme(axis_title_size = 14,
               axis_text_size = 12,
               legend_text_size = 12,
               legend_title_size = 14,
@@ -89,7 +89,7 @@ wealth <-
   scale_fill_manual(name = "Treatment", values = ribbon_colors,
                     labels = c("Not exposed to the reform", "Exposed to the reform")) +
   scale_y_continuous(limits = c(-2, 2)) +
-  theme_pilot(axis_title_size = 14,
+  theme(axis_title_size = 14,
               axis_text_size = 12,
               legend_text_size = 12,
               legend_title_size = 14,
@@ -166,7 +166,7 @@ a <- plot_model(
 
 # Base theming and labels
 a <- a +
-  theme_pilot(
+  theme(
     axis_title_size = 12,
     axis_text_size  = 12,
     legend_text_size = 12,
