@@ -42,9 +42,6 @@ library(sandwich)
 library(lmtest)
 library(gridExtra)
 library(cowplot)
-library(pilot)
-library(effects)
-library(ggpubr)
 library(sjPlot)
 library(sjmisc)
 library(broom)
@@ -59,7 +56,7 @@ library(cowplot)
 
 # SET WD 
 
-setwd("/Users/agarcias/Library/CloudStorage/OneDrive-UniversitédeLausanne/EDUCATIONAL REFORMS ELSA/DATA")
+setwd("~/Documents/EDUCATIONAL REFORMS ELSA/DATA")
 
 # SET THEME FOR GRAPHS
 
